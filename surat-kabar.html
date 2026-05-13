@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Kabar Tuku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --cream: #F5EEDD;
+            --tan: #D6C4A1;
+            --terracotta: #B55A2A;
+            --olive: #8B8B5F;
+            --green: #717D50;
+            --black: #2A2A2A;
+            --white: #FFFFFF;
+            --font-mono: 'Space Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+            --font-serif: 'Playfair Display', serif;
+            --font-inter: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-inter);
+            background: var(--cream);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #2A2A2A;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar__logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--white);
+        }
+        .navbar__logo svg { width: 32px; height: 32px; }
+        .navbar__logo-text { font-family: var(--font-hand); font-size: 24px; font-weight: 700; letter-spacing: 2px; }
+        .navbar__menu { display: flex; gap: 30px; list-style: none; }
+        .navbar__menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .navbar__menu a:hover, .navbar__menu a.active { opacity: 1; }
+
+        /* HEADER BAR */
+        .header-bar {
+            background: #2A2A2A;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .header-bar h1 {
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+
+        /* TABS */
+        .tabs { display: flex; width: 100%; }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white);
+            text-align: center;
+            transition: opacity 0.3s;
+        }
+        .tab--produk { background: var(--terracotta); }
+        .tab--tetangga { background: var(--tan); color: var(--black); }
+        .tab--lanjutan { background: var(--olive); }
+        .tab:not(.active) { opacity: 0.6; }
+        .tab:hover { opacity: 0.9; }
+
+        /* CONTENT AREAS */
+        .content { display: none; padding: 60px 80px; }
+        .content.active { display: block; }
+
+        /* INFOGRAPHIC LAYOUTS */
+        .info-layout { display: flex; align-items: center; gap: 60px; margin-bottom: 60px; }
+        .info-left { flex: 1; text-align: center; }
+        .info-right { flex: 1.5; }
+
+        .illustration { width: 100%; max-width: 300px; filter: grayscale(1); margin-bottom: 20px; }
+        
+        .box-label {
+            display: inline-block;
+            padding: 10px 25px;
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+        .box-label--terracotta { background: var(--terracotta); }
+        .box-label--tan { background: var(--tan); color: var(--black); }
+        .box-label--green { background: #7C8A5C; }
+        
+        .tagline { font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--black); letter-spacing: 1px; line-height: 1.4; }
+
+        .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px; }
+        .concept-item h2 { font-family: var(--font-mono); font-size: 26px; font-weight: 700; margin-bottom: 15px; }
+        .concept-item p { font-family: var(--font-inter); font-size: 12px; line-height: 1.8; color: #444; }
+
+        .center-arrow { text-align: center; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .center-arrow span { font-family: var(--font-mono); font-size: 14px; font-weight: 700; text-transform: uppercase; }
+        .arrow-icon { font-size: 24px; color: #999; }
+
+        /* TETANGGA LIST */
+        .numbered-list { display: flex; flex-direction: column; gap: 30px; }
+        .numbered-item h2 { font-family: var(--font-mono); font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .numbered-item p { font-family: var(--font-inter); font-size: 12px; line-height: 1.8; color: #444; max-width: 450px; }
+
+        /* CIRCULAR DIAGRAM */
+        .circular-diagram { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 40px; }
+        .node { text-align: center; }
+        .node h4 { font-family: var(--font-mono); font-size: 18px; font-weight: 700; }
+        .node p { font-family: var(--font-mono); font-size: 10px; color: #777; }
+        .main-node { border: 2px solid var(--black); padding: 12px 20px; font-family: var(--font-mono); font-size: 13px; font-weight: 700; text-align: center; }
+        .curved-arrow { font-size: 40px; color: #AAA; font-weight: 300; }
+
+        /* POLAROID SECTION */
+        .section-divider {
+            border-top: 1px solid #CCC;
+            margin: 40px 0 30px;
+            padding-top: 20px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .polaroid-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+        .polaroid {
+            background: var(--white);
+            padding: 10px 10px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .polaroid:hover { transform: translateY(-5px); }
+        .polaroid__img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: grayscale(1); margin-bottom: 12px; }
+        .polaroid__title { font-family: var(--font-mono); font-size: 11px; font-weight: 700; line-height: 1.4; text-transform: uppercase; margin-bottom: 10px; height: 32px; overflow: hidden; }
+        .polaroid__link { 
+            font-family: var(--font-hand); 
+            font-size: 14px; 
+            color: #B55A2A; 
+            text-decoration: none; 
+            border-bottom: 1px dotted #B55A2A; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar__logo">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2"/>
+                <path d="M14 14 C14 14 16 12 20 12 C24 12 26 14 26 14" stroke="white" stroke-width="1.5" fill="none"/>
+                <circle cx="16" cy="18" r="1.5" fill="white"/>
+                <circle cx="24" cy="18" r="1.5" fill="white"/>
+                <path d="M15 23 C15 23 17 26 20 26 C23 26 25 23 25 23" stroke="white" stroke-width="1.5" fill="none"/>
+                <rect x="12" y="8" rx="2" width="16" height="4" stroke="white" stroke-width="1" fill="none"/>
+            </svg>
+            <span class="navbar__logo-text">TUKU</span>
+        </a>
+        <ul class="navbar__menu">
+            <li><a href="index.html#tentang">TENTANG</a></li>
+            <li><a href="index.html#lokasi">LOKASI</a></li>
+            <li><a href="surat-kabar.html" class="active">SURAT KABAR</a></li>
+            <li><a href="galeri.html">GALERI</a></li>
+        </ul>
+    </nav>
+
+    <div class="header-bar">
+        <h1>SURAT KABAR TUKU</h1>
+    </div>
+
+    <div class="tabs">
+        <button class="tab tab--produk active" data-tab="produk">PRODUK YANG KONSISTEN</button>
+        <button class="tab tab--tetangga" data-tab="tetangga">BERTETANGGA BAIK</button>
+        <button class="tab tab--lanjutan" data-tab="lanjutan">MENJUNJUNG KEBERLANJUTAN</button>
+    </div>
+
+    <!-- TAB 1: PRODUK -->
+    <div class="content active" id="content-produk">
+        <div class="info-layout">
+            <div class="info-left">
+                <img src="images/coffee_shop_interior.png" class="illustration" alt="Coffee Brewing Illustration">
+                <div class="box-label box-label--terracotta">SPESIALISASI PRODUK</div>
+                <p class="tagline">MENIKMATI MANISNYA, PAHITNYA, HANGATNYA, SEJUKNYA, RUKUN BERTETANGGA</p>
+            </div>
+            <div class="info-right">
+                <div class="concept-grid">
+                    <div class="concept-item">
+                        <h2>EKSPLORASI</h2>
+                        <p>Digerakan oleh semangat riset dan pengembangan dari hasil bumi Indonesia untuk menghadirkan produk yang nyaman di lidah dan nyaman di hati.</p>
+                    </div>
+                    <div class="concept-item">
+                        <h2>KONSISTENSI</h2>
+                        <p>Stabilitas pada kualitas rasa dan kecepatan penyajian demi menjaga posisi TUKU sebagai pilihan yang dapat diandalkan tetangga.</p>
+                    </div>
+                </div>
+                <div class="center-arrow">
+                    <span class="arrow-icon">←</span>
+                    <span>KESEIMBANGAN PRODUK</span>
+                    <span class="arrow-icon">→</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-divider">ARTIKEL TERKAIT PRODUK</div>
+        <div class="polaroid-grid">
+            <div class="polaroid">
+                <img src="images/cold_drip.png" class="polaroid__img">
+                <p class="polaroid__title">MULAI HARI ATAU TUTUP HARI, ADA COLD DRIP PAGI DAN SORE</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/kst_nabati.png" class="polaroid__img">
+                <p class="polaroid__title">TETAP BISA JAJAN BASO TAHU DI TUKU BANDUNG</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/latte_coffee.png" class="polaroid__img">
+                <p class="polaroid__title">JAJANAN PASAR JADI TEMAN NGOPI DI TUKU KOTABARU</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/espresso.png" class="polaroid__img">
+                <p class="polaroid__title">AWAL MULA TUKUCUR</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: TETANGGA -->
+    <div class="content" id="content-tetangga">
+        <div class="info-layout">
+            <div class="info-left">
+                <img src="images/community_photos.png" class="illustration" alt="Tetangga Illustration">
+                <div class="box-label box-label--tan">BERTETANGGA BAIK</div>
+                <p class="tagline">LAHIR KARENA MIMPI, BESAR KARENA TETANGGA</p>
+            </div>
+            <div class="info-right">
+                <div class="numbered-list">
+                    <div class="numbered-item">
+                        <h2>1. SENYUM, SAPA, SALAM</h2>
+                        <p>Budaya dari seluruh lapisan struktur keluarga TUKU. Sebuah upaya untuk mengenal, memahami, dan mendengarkan tetangga.</p>
+                    </div>
+                    <div class="numbered-item">
+                        <h2>2. KUMPUL TETANGGA TUKU</h2>
+                        <p>Berkegiatan bersama tetangga. Kadang untuk perayaan, kadang hanya untuk bersenda-gurau, yang penting bisa berkumpul.</p>
+                    </div>
+                    <div class="numbered-item">
+                        <h2>3. KARTU RUKUN TETANGGA</h2>
+                        <p>Kalau negara punya TKR, TUKU punya KaRT. Sebuah tanda eratnya pertetanggaan. Belajar bersama, membuat gerakan bersama juga.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider">ARTIKEL BERTETANGGA BAIK</div>
+        <div class="polaroid-grid">
+            <div class="polaroid">
+                <img src="images/coffee_exterior.png" class="polaroid__img">
+                <p class="polaroid__title">STASIUN CIPETE RAYA TUKU</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/community_photos.png" class="polaroid__img">
+                <p class="polaroid__title">BAGI RAPOT DI TUKU JOGJA</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/team_photo.png" class="polaroid__img">
+                <p class="polaroid__title">KOPI ITIKAF UNTUK TETANGGA TUKU</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/coffee_shop_interior.png" class="polaroid__img">
+                <p class="polaroid__title">BAGRAG TARTUK: BERBAGI TAKJIL DI BULAN RAMADAN</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: LANJUTAN -->
+    <div class="content" id="content-lanjutan">
+        <div class="info-layout">
+            <div class="info-left">
+                <img src="images/coffee_beans.png" class="illustration" alt="Sustainability Illustration">
+                <div class="box-label box-label--green">RANTAI KEBERLANJUTAN</div>
+                <p class="tagline">SATU LANGKAH KECIL HARI INI UNTUK BERIBU CERITA BAIK DI KEMUDIAN HARI</p>
+            </div>
+            <div class="info-right">
+                <div class="concept-grid">
+                    <div class="concept-item">
+                        <h2>MEMBUAT GERAKAN</h2>
+                        <p>Waste Management Community<br>Empowerment Recycle & Upcycle</p>
+                    </div>
+                    <div class="concept-item">
+                        <h2>MEMBAWA DAMPAK</h2>
+                        <p>Responsible Sourcing Community<br>Organizing Reforestation</p>
+                    </div>
+                </div>
+                <div class="circular-diagram">
+                    <div class="node">
+                        <h4>TETANGGA</h4>
+                        <p>DI HILIR</p>
+                    </div>
+                    <span class="curved-arrow">⤿</span>
+                    <div class="main-node">EKOSISTEM SIRKULER<br>PERTETANGGAAN TUKU</div>
+                    <span class="curved-arrow">⤾</span>
+                    <div class="node">
+                        <h4>PETANI</h4>
+                        <p>DI HULU</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider">ARTIKEL MENJUNJUNG KEBERLANJUTAN</div>
+        <div class="polaroid-grid">
+            <div class="polaroid">
+                <img src="images/community_photos.png" class="polaroid__img">
+                <p class="polaroid__title">BERGOTONGROYONG DALAM WASTE MANAGEMENT</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/coffee_beans.png" class="polaroid__img">
+                <p class="polaroid__title">BERSEMI: PENANAMAN KEMBALI UNTUK BUMI</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/coffee_exterior.png" class="polaroid__img">
+                <p class="polaroid__title">DIY PILAH SAMPAY: MULAI DARI TUKU GBK</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+            <div class="polaroid">
+                <img src="images/coffee_logo.png" class="polaroid__img">
+                <p class="polaroid__title">MENGENAL SERI RAMAH, CENDERAMATA DAUR ULANG TOSERBAKU</p>
+                <a href="#" class="polaroid__link">Informasi Selengkapnya</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById('content-' + target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
